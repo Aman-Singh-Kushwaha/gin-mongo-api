@@ -16,10 +16,12 @@ import (
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson" //bson is a binary representation of json
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	// "go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/keploy/go-sdk/integrations/kmongo"
 )
 
-var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
+var userCollection *kmongo.Collection = configs.GetCollection(configs.DB, "users")
 var validate = validator.New()
 
 func CreateUser() gin.HandlerFunc {

@@ -1,23 +1,39 @@
 package main
 
 import (
-    "gin-mongo-api/configs"
-    "gin-mongo-api/routes" 
-    "github.com/gin-gonic/gin"
+	"gin-mongo-api/configs"
+	"gin-mongo-api/routes"
+	"github.com/gin-gonic/gin"
+
+	"github.com/keploy/go-sdk/integrations/kgin/v1"
+	"github.com/keploy/go-sdk/keploy"
+	// "github.com/keploy/go-sdk/integrations/kmongo"   used in configs/setup.go where we connect to the database
 )
 
 func main() {
-    router := gin.Default()
+	r := gin.New() // use gin.New() to create a new Gin router
 
-    //run database
-    configs.ConnectDB()
+	//initialize Keploy
+	port := "6000"
+	k := keploy.New(keploy.Config{
+		App: keploy.AppConfig{
+			Name: "my_app",
+			Port: port,
+		},
+		Server: keploy.ServerConfig{
+			URL: "http://localhost:6000/",
+		},
+	})
+	kgin.GinV1(k, r) // use Keploy's GinV1 function to initialize the router
 
-    //routes
-    routes.UserRoute(router) //add this
+	//run database
+	configs.ConnectDB()
 
-    router.Run("localhost:6000")
+	//routes
+	routes.UserRoute(r) // pass the router to UserRoute
+
+	r.Run(":" + port) // use r instead of router
 }
-
 
 // func main() {
 //   router := gin.Default()
@@ -28,5 +44,5 @@ func main() {
 //     })
 //   })
 
-// 	router.Run("localhost:6000") 
+// 	router.Run("localhost:6000")
 // }

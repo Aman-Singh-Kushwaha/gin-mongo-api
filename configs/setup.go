@@ -14,6 +14,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"time"
+
+	"github.com/keploy/go-sdk/integrations/kmongo" // add the Keploy import
 )
 
 func ConnectDB() *mongo.Client {
@@ -41,7 +43,8 @@ func ConnectDB() *mongo.Client {
 var DB *mongo.Client = ConnectDB()
 
 // getting database collections
-func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	collection := client.Database("golangAPI").Collection(collectionName)
-	return collection
+func GetCollection(client *mongo.Client, collectionName string) *kmongo.Collection { // update the return type to use kmongo.Collection
+	db := client.Database("golangAPI")
+	col := kmongo.NewCollection(db.Collection(collectionName)) // use kmongo.NewCollection
+	return col
 }
