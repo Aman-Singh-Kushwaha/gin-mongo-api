@@ -21,7 +21,7 @@ func main() {
 			Port: port,
 		},
 		Server: keploy.ServerConfig{
-			URL: "http://localhost:6000/",
+			URL: "http://localhost:6789/",
 		},
 	})
 	kgin.GinV1(k, r) // use Keploy's GinV1 function to initialize the router
